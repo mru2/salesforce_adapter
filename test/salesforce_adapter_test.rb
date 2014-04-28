@@ -2,10 +2,11 @@
 
 require 'minitest/autorun'
 require 'mocha/setup'
-require 'salesforce_adapter'
 
 require 'coveralls'
 Coveralls.wear!
+
+require 'salesforce_adapter'
 
 # Fix for ruby 1.8, make ordered hash from list of arguments
 def ohash(*args)
