@@ -162,7 +162,7 @@ RFORCE_UPDATES = {
         :result => {
           :errors => {
             :fields => "Id", 
-            :message => "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV", 
+            :message => "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV", 
             :statusCode => "MALFORMED_ID"
           }, 
           :success => false, 
@@ -258,7 +258,7 @@ RFORCE_CREATES = {
         :result => {
           :errors => {
             :fields => "Company", 
-            :message => "Des champs obligatoires n'ont pas été renseignés : [Company]", 
+            :message => "Des champs obligatoires n'ont pas été renseignés : [Company]", 
             :statusCode => "REQUIRED_FIELD_MISSING"
           }, 
           :success => false, 
@@ -432,7 +432,7 @@ class SalesforceAdapterTest < MiniTest::Unit::TestCase
     end
 
     assert_equal 'MALFORMED_ID', exception.code
-    assert exception.message.start_with? "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV\nContext : updating salesforce Account with attributes"
+    assert exception.message.start_with? "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV\nContext : updating salesforce Account with attributes"
 
 
     # It should also raise an exception on an api fault
@@ -469,7 +469,7 @@ class SalesforceAdapterTest < MiniTest::Unit::TestCase
     end
 
     assert_equal 'REQUIRED_FIELD_MISSING', exception.code
-    assert exception.message.start_with? "Des champs obligatoires n'ont pas été renseignés : [Company]\nContext : creating salesforce Lead with attributes "
+    assert exception.message.start_with? "Des champs obligatoires n'ont pas été renseignés : [Company]\nContext : creating salesforce Lead with attributes "
 
 
     # It should raise an exception on an API fault
