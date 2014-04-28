@@ -1,6 +1,8 @@
 # SalesforceAdapter
 
-[![Build Status](https://travis-ci.org/mru2/salesforce_adapter.png?branch=master)](https://travis-ci.org/mru2/salesforce_adapter)
+[![Build Status](https://travis-ci.org/mru2/salesforce_adapter.png?branch=master)](https://travis-ci.org/mru2/salesforce_adapter) [![Code Climate](https://codeclimate.com/github/mru2/salesforce_adapter.png)](https://codeclimate.com/github/mru2/salesforce_adapter)
+
+
 
 Ruby client for the salesforce API
 Actually, lightweight wrapper around the RForce gem
