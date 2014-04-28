@@ -1,6 +1,6 @@
 # SalesforceAdapter
 
-[![Build Status](https://travis-ci.org/mru2/salesforce_adapter.png?branch=master)](https://travis-ci.org/mru2/salesforce_adapter) [![Code Climate](https://codeclimate.com/github/mru2/salesforce_adapter.png)](https://codeclimate.com/github/mru2/salesforce_adapter)
+[![Build Status](https://travis-ci.org/mru2/salesforce_adapter.png?branch=master)](https://travis-ci.org/mru2/salesforce_adapter) [![Coverage Status](https://coveralls.io/repos/mru2/salesforce_adapter/badge.png)](https://coveralls.io/r/mru2/salesforce_adapter) [![Code Climate](https://codeclimate.com/github/mru2/salesforce_adapter.png)](https://codeclimate.com/github/mru2/salesforce_adapter)
 
 
 
