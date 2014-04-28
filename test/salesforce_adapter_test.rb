@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'minitest/autorun'
 require 'mocha/setup'
 require 'salesforce_adapter'
