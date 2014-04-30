@@ -4,6 +4,23 @@ module SalesforceAdapter
 
   class RforceBinding
 
+    # Potential errors raisable is the salesforce API is down
+    TIMEOUT_ERRORS = [
+      Timeout::Error,
+      Errno::EINVAL,
+      Errno::ECONNRESET,
+      Errno::ETIMEDOUT,
+      Errno::EHOSTUNREACH,
+      Errno::ECONNREFUSED,
+      Errno::EPIPE,
+      EOFError,
+      Net::HTTPBadResponse,
+      Net::HTTPHeaderSyntaxError,
+      Net::ProtocolError,
+      # OpenURI::HTTPError,
+      SocketError      
+    ]
+
     def initialize(url, login, password)
       @url      = url
       @login    = login
@@ -42,7 +59,7 @@ module SalesforceAdapter
           @rforce.send method_name, *args, &block
 
         # Handle timeouts from salesforce
-        rescue Errno::ECONNRESET => e
+        rescue *TIMEOUT_ERRORS => e
           raise SalesforceAdapter::SalesforceTimeout.new(e.message)
         end
 
