@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'minitest/autorun'
 require 'mocha/setup'
 require 'salesforce_adapter'
@@ -159,7 +161,7 @@ RFORCE_UPDATES = {
         :result => {
           :errors => {
             :fields => "Id", 
-            :message => "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV", 
+            :message => "ID du compte: Valeur d'ID de type incorrect: 00111000002zYnUAAV", 
             :statusCode => "MALFORMED_ID"
           }, 
           :success => false, 
@@ -429,7 +431,7 @@ class SalesforceAdapterTest < MiniTest::Unit::TestCase
     end
 
     assert_equal 'MALFORMED_ID', exception.code
-    assert exception.message.start_with? "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV\nContext : updating salesforce Account with attributes"
+    assert exception.message.start_with? "ID du compte: Valeur d'ID de type incorrect: 00111000002zYnUAAV\nContext : updating salesforce Account with attributes"
 
 
     # It should also raise an exception on an api fault
