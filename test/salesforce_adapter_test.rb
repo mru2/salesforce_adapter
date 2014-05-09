@@ -1,11 +1,5 @@
-# encoding: UTF-8
-
 require 'minitest/autorun'
 require 'mocha/setup'
-
-require 'coveralls'
-Coveralls.wear!
-
 require 'salesforce_adapter'
 
 # Fix for ruby 1.8, make ordered hash from list of arguments
@@ -165,7 +159,7 @@ RFORCE_UPDATES = {
         :result => {
           :errors => {
             :fields => "Id", 
-            :message => "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV", 
+            :message => "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV", 
             :statusCode => "MALFORMED_ID"
           }, 
           :success => false, 
@@ -261,7 +255,7 @@ RFORCE_CREATES = {
         :result => {
           :errors => {
             :fields => "Company", 
-            :message => "Des champs obligatoires n'ont pas été renseignés : [Company]", 
+            :message => "Des champs obligatoires n'ont pas été renseignés : [Company]", 
             :statusCode => "REQUIRED_FIELD_MISSING"
           }, 
           :success => false, 
@@ -435,7 +429,7 @@ class SalesforceAdapterTest < MiniTest::Unit::TestCase
     end
 
     assert_equal 'MALFORMED_ID', exception.code
-    assert exception.message.start_with? "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV\nContext : updating salesforce Account with attributes"
+    assert exception.message.start_with? "ID du compte: Valeur d'ID de type incorrect : 00111000002zYnUAAV\nContext : updating salesforce Account with attributes"
 
 
     # It should also raise an exception on an api fault
@@ -472,7 +466,7 @@ class SalesforceAdapterTest < MiniTest::Unit::TestCase
     end
 
     assert_equal 'REQUIRED_FIELD_MISSING', exception.code
-    assert exception.message.start_with? "Des champs obligatoires n'ont pas été renseignés : [Company]\nContext : creating salesforce Lead with attributes "
+    assert exception.message.start_with? "Des champs obligatoires n'ont pas été renseignés : [Company]\nContext : creating salesforce Lead with attributes "
 
 
     # It should raise an exception on an API fault
@@ -510,6 +504,19 @@ class SalesforceAdapterTest < MiniTest::Unit::TestCase
     @adapter.expects(:call_webservice).with(:my_method, {:foo => 'bar'}, 'http://soap.sforce.com/schemas/class/my_webservice_name', '/services/Soap/class/my_webservice_name')
 
     ws_proxy.my_method(:foo => 'bar')
+  end
+
+
+  def test_timeouts
+    Kernel.stubs(:sleep).returns() # No sleep between retries
+
+    # Standard timeout
+    @binding.expects(:query).times(4).raises(Errno::EPIPE, '') # 4 tries
+    assert_raises(SalesforceAdapter::SalesforceTimeout){ @adapter.query('a query') }
+
+    # RForce error
+    @binding.expects(:query).times(4).raises(RuntimeError, 'Incorrect user name / password [{:faultcode=>"SERVER_UNAVAILABLE", :faultstring=>"SERVER_UNAVAILABLE: server temporarily unavailable", :detail=>{:UnexpectedErrorFault=>{:exceptionCode=>"SERVER_UNAVAILABLE", :exceptionMessage=>"server temporarily unavailable"}}}]')
+    assert_raises(SalesforceAdapter::SalesforceTimeout){ @adapter.query('a query') }
   end
 
 

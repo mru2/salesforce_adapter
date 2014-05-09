@@ -9,11 +9,27 @@ module SalesforceAdapter
 
   module Helpers
 
+    # Potential errors raisable if the salesforce API is down
+    TIMEOUT_ERRORS = [
+      Timeout::Error,
+      Errno::EINVAL,
+      Errno::ECONNRESET,
+      Errno::ETIMEDOUT,
+      Errno::EHOSTUNREACH,
+      Errno::ECONNREFUSED,
+      Errno::EPIPE,
+      EOFError,
+      Net::HTTPBadResponse,
+      Net::HTTPHeaderSyntaxError,
+      Net::ProtocolError,
+      SocketError      
+    ]
+
     class << self
 
       # Attemps to run a salesforce operation a given number of times, 
       # Handle timeout errors and sleep between retries
-      def handle_timeout(opts= {}, &block)
+      def handle_timeout(opts= {})
 
         max_tries = opts[:max_tries] || 1
         sleep_between_tries = opts[:sleep_between_tries] || 1
@@ -22,13 +38,26 @@ module SalesforceAdapter
 
         begin
           counter += 1
-          yield
+          yield if block_given?
 
-        rescue Timeout::Error => e
+        # Standard ruby exceptions when a remote host is down
+        rescue *TIMEOUT_ERRORS => e
           raise SalesforceAdapter::SalesforceTimeout.new(e.message) if counter >= max_tries
-
-          sleep sleep_between_tries
+          Kernel.sleep sleep_between_tries
           retry
+
+        # The RForce gem may raise runtime errors if salesforce is down (e.g : when logging in)
+        rescue RuntimeError => e
+
+          if e.message.match /SERVER_UNAVAILABLE/
+            raise SalesforceAdapter::SalesforceTimeout.new(e.message) if counter >= max_tries
+            Kernel.sleep sleep_between_tries
+            retry
+
+          else
+            raise
+          end
+
         end
 
       end
